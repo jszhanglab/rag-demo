@@ -33,3 +33,6 @@ dist/
 # OS files
 ehthumbs.db
 Icon?
+
+#self files
+self_memo.md
