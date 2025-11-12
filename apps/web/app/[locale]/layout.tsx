@@ -2,6 +2,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { notFound } from "next/navigation";
 import { locales, Locale } from "@/i18n/i18n";
 import "../globals.css";
+import Shell from "@/components/Shell/Shell";
 
 /**
  * This function is a Next.js special export for dymatic routes.
@@ -34,7 +35,7 @@ export default async function RootLayout({
     <html lang={locale}>
       <body>
         <NextIntlClientProvider locale={locale} messages={messages}>
-          {children}
+          <Shell>{children}</Shell>
         </NextIntlClientProvider>
       </body>
     </html>
