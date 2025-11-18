@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import UploadArea from "./UploadArea";
 
 type ViewerProps = {
   docId: string | null;
@@ -11,21 +12,34 @@ export default function Viewer({ docId, page }: ViewerProps) {
 
   useEffect(() => {
     if (!docId) {
-      setHtml(
-        "<div class='p-8 text-muted-foreground'>No document selected.</div>"
-      );
+      setHtml("");
       return;
     }
 
-    // Mock preview
+    // Mock 预览内容
     setHtml(
       `<div style="padding:24px">Preview of <b>${docId}</b> — page ${page}</div>`
     );
   }, [docId, page]);
 
+  if (!docId) {
+    return (
+      <div className="h-full bg-white flex items-center justify-center">
+        <div className="text-sm text-slate-500">
+          <UploadArea></UploadArea>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-full">
-      <div dangerouslySetInnerHTML={{ __html: html }} />
+    <div className="h-full bg-white">
+      <div className="h-full p-6">
+        <div
+          className="text-sm text-slate-800"
+          dangerouslySetInnerHTML={{ __html: html }}
+        />
+      </div>
     </div>
   );
 }

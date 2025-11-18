@@ -1,4 +1,8 @@
 {
-  "hello": "Hello",
-  "welcome": "Welcome"
+  "Header": {
+    "sidebar": {
+      "expand": "Show sidebar",
+      "collapse": "Hide sidebar"
+    }
+  }
 }

@@ -1,0 +1,8 @@
+/* global CSS */
+:root {
+  --header-h: 56px; /* header */
+}
+
+main {
+  transition: grid-template-columns 200ms ease;
+}

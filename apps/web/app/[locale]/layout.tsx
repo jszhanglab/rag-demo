@@ -5,8 +5,16 @@ import "../globals.css";
 import Shell from "@/components/Shell/Shell";
 
 /**
+ * layout
+ *   └─ Shell
+ *        └─ page
+ *             └─ Hider(i18n)
+ *             └─ Sidebar / Viewer / ChatPanel
+ */
+
+/**
  * This function is a Next.js special export for dymatic routes.
- * It runs at build time and tells Next.js whick parameters(locales in this case)
+ * It runs at build time and tells Next.js which parameters(locales in this case)
  * should be statically generated.
  * Each returned object corresponds to a route like /en, /ja or /zh
  * @returns 
@@ -27,7 +35,7 @@ export default async function RootLayout({
   params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = await params;
-  if (!locales.includes(locale)) notFound();
+  //if (!locales.includes(locale)) notFound();
 
   const messages = (await import(`@/i18n/messages/${locale}.json`)).default;
 
@@ -35,7 +43,7 @@ export default async function RootLayout({
     <html lang={locale}>
       <body>
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <Shell>{children}</Shell>
+          <Shell locale={locale}>{children}</Shell>
         </NextIntlClientProvider>
       </body>
     </html>

@@ -12,7 +12,7 @@ import { locales, defaultLocale } from "./i18n/i18n";
 export default createMiddleware({
   locales,
   defaultLocale,
-  localeDetection: true,
+  localeDetection: true, // Automatically detect the user's browser language ONLY when the URL does not include a locale (e.g. visiting "/").
 });
 
 export const config = {
