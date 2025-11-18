@@ -1,4 +1,8 @@
 {
-  "hello": "こんにちは",
-  "welcome": "ようこそ"
+  "Header": {
+    "sidebar": {
+      "expand": "サイドバーを表示",
+      "collapse": "サイドバーを閉じる"
+    }
+  }
 }

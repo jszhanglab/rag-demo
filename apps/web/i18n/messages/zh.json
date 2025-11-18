@@ -1,4 +1,8 @@
 {
-  "hello": "你好",
-  "welcome": "欢迎"
+  "Header": {
+    "sidebar": {
+      "expand": "展开侧边栏",
+      "collapse": "收起侧边栏"
+    }
+  }
 }

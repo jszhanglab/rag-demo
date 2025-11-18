@@ -15,10 +15,8 @@ export default function ChatPanel({ docId, threadId }: ChatPanelProps) {
   function handleSend() {
     if (!input.trim()) return;
 
-    // Add user message
     setMessages((prev) => [...prev, { role: "user", content: input }]);
 
-    // Add a mock assistant reply
     const reply = `Mock reply for docId=${docId ?? "none"}, threadId=${
       threadId ?? "none"
     }`;
@@ -28,13 +26,16 @@ export default function ChatPanel({ docId, threadId }: ChatPanelProps) {
   }
 
   return (
-    <div className="h-full flex flex-col">
-      <div className="flex-1 overflow-y-auto p-3 space-y-2">
+    <div className="h-full flex flex-col bg-white">
+      {/* Messages */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-3">
         {messages.map((m, i) => (
           <div
             key={i}
-            className={`p-2 rounded border text-sm ${
-              m.role === "user" ? "text-right bg-blue-50" : "bg-gray-50"
+            className={`text-sm max-w-[80%] p-2 rounded-md ${
+              m.role === "user"
+                ? "ml-auto bg-blue-100 text-blue-900"
+                : "bg-slate-100 text-slate-800"
             }`}
           >
             {m.content}
@@ -42,9 +43,21 @@ export default function ChatPanel({ docId, threadId }: ChatPanelProps) {
         ))}
       </div>
 
-      <div className="border-t p-2 flex gap-2">
+      {/* Input area */}
+      <div className="border-t border-slate-200 bg-white p-3 flex gap-2 items-center">
         <textarea
-          className="flex-1 border rounded p-2 text-sm h-16"
+          className="
+            flex-1 
+            border border-slate-300 
+            rounded-md 
+            px-3 py-2 
+            text-sm 
+            resize-none 
+            h-16
+            focus:outline-none 
+            focus:ring-2 
+            focus:ring-slate-400
+          "
           placeholder="Type a message..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
@@ -55,9 +68,18 @@ export default function ChatPanel({ docId, threadId }: ChatPanelProps) {
             }
           }}
         />
+
         <button
           onClick={handleSend}
-          className="border rounded px-3 text-sm bg-white hover:bg-gray-100"
+          className="
+            border border-slate-300 
+            rounded-md 
+            px-4 py-2 
+            text-sm 
+            bg-white 
+            hover:bg-slate-100 
+            transition-colors
+          "
         >
           Send
         </button>
