@@ -1,18 +1,23 @@
-# 开发日志（dev_log.md）
+# Development Log
 
 ## 2025-11-5
-
-- 完成项目结构搭建
-
-  - 'web/' : Next.js 前端
-  - 'gateway/' : Node.js 网关
-  - 'rag-service/' : FastApi RAG 核心服务
-  - 'docs/' : 思维导图与设计文档
-
-- 'web/'初始化完成
-- 完成 README.md
-- 导入思维导图
+- Completed project structure setup:
+ - 'web/': Next.js frontend
+ - 'gateway/': Node.js gateway
+ - 'rag-service/': FastAPI RAG core service
+ - 'docs/': Mind maps and design documentation
+- Initialized 'web/'.
+- Imported mind maps.
 
 ## 2025-11-7
+- Refactored project structure to support i18n and monorepo.
 
-- 为支持i18n，并满足monorepo，重构项目结构
+## 2025-11-12
+- Completed the base layout structure, including header, main container, and three-column layout.
+- 
+## 2025-11-18
+- Added collapsible sidebar with toggle button and state management.
+- Verified layout responsiveness and basic UI interactions.
+
+## 2025-11-21
+- Completed the upload layout.

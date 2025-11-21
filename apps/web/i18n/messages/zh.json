@@ -4,5 +4,17 @@
       "expand": "展开侧边栏",
       "collapse": "收起侧边栏"
     }
+  },
+  "meta": {
+    "title": "RAG Demo（中文）",
+    "description": "文档智能问答系统"
+  },
+  "upload": {
+    "tips": "点击上传，或将PDF拖拽到此处",
+    "button": "上传PDF",
+    "upload_successed": "文件上传成功！",
+    "upload_failed": "文件上传出错！",
+    "invalid_type": "仅支持PDF格式",
+    "invalid_size": "上传的PDF文件太大"
   }
 }

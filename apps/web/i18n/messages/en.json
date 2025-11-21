@@ -4,5 +4,17 @@
       "expand": "Show sidebar",
       "collapse": "Hide sidebar"
     }
+  },
+  "meta": {
+    "title": "RAG Demo",
+    "description": "Document-based intelligent QA system"
+  },
+  "upload": {
+    "tips": "Click to upload, or drag PDF here",
+    "button": "upload PDF",
+    "upload_successed": "File uploaded successfully!",
+    "upload_failed": "Error uploading the file!",
+    "invalid_type": "Please upload a PDF file",
+    "invalid_size": "uPlease upload a PDF file that is less than 10MB"
   }
 }

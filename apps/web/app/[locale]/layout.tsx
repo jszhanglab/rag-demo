@@ -1,5 +1,4 @@
 import { NextIntlClientProvider } from "next-intl";
-import { notFound } from "next/navigation";
 import { locales, Locale } from "@/i18n/i18n";
 import "../globals.css";
 import Shell from "@/components/Shell/Shell";
@@ -27,6 +26,32 @@ export function generateStaticParams() {
   return locales.map((locale) => ({ locale })); // locales.map((locale) => { return { locale: locale };});
 }
 
+/**
+ * Nest.js built-in metadata genarate function.
+ * @param params
+ * @returns metadata
+ */
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}) {
+  const { locale } = await params;
+
+  try {
+    const messages = (await import(`@/i18n/messages/${locale}.json`)).default;
+
+    return {
+      title: messages.meta?.title ?? "RAG Demo",
+      description: messages.meta?.description ?? "RAG Demo",
+    };
+  } catch (e) {
+    return {
+      title: "RAG Demo",
+    };
+  }
+}
+
 export default async function RootLayout({
   children,
   params,
@@ -35,7 +60,6 @@ export default async function RootLayout({
   params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = await params;
-  //if (!locales.includes(locale)) notFound();
 
   const messages = (await import(`@/i18n/messages/${locale}.json`)).default;
 

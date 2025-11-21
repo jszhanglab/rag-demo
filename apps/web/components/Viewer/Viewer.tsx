@@ -24,8 +24,8 @@ export default function Viewer({ docId, page }: ViewerProps) {
 
   if (!docId) {
     return (
-      <div className="h-full bg-white flex items-center justify-center">
-        <div className="text-sm text-slate-500">
+      <div className="h-full bg-white flex justify-center">
+        <div className="mt-24">
           <UploadArea></UploadArea>
         </div>
       </div>

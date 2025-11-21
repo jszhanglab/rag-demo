@@ -4,5 +4,17 @@
       "expand": "サイドバーを表示",
       "collapse": "サイドバーを閉じる"
     }
+  },
+  "meta": {
+    "title": "RAGデモ",
+    "description": "検索拡張生成DEMO"
+  },
+  "upload": {
+    "tips": "クリックしてアップロード、またはここにPDFをドラッグ",
+    "button": "PDFをアップロード",
+    "upload_successed": "ファイルが正常にアップロードされました！",
+    "upload_failed": "ファイルのアップロード中にエラーが発生しました！",
+    "invalid_type": "PDFファイルのみしてください",
+    "invalid_size": "PDFのサイズが大きすぎます"
   }
 }
