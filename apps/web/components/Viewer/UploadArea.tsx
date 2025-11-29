@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
+import { API_ROUTES } from "@/constants/apiRoutes";
 
 export default function UploadArea() {
   const t = useTranslations("upload"); //i18n
@@ -11,8 +12,8 @@ export default function UploadArea() {
   const [error, setError] = useState<string | null>(null);
   const [uploadResult, setUploadResult] = useState<"success" | "error" | null>(
     null
-  ); // 文件上传状态
-  const [showNotification, setShowNotification] = useState(false); // 控制通知显示
+  );
+  const [showNotification, setShowNotification] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -30,7 +31,7 @@ export default function UploadArea() {
   };
 
   const handleDragOver = (event: React.DragEvent) => {
-    event.preventDefault(); // 必须阻止默认行为，以便触发 drop
+    event.preventDefault();
   };
 
   const handleDrop = (event: React.DragEvent) => {
@@ -65,11 +66,16 @@ export default function UploadArea() {
     setUploading(true);
     setError(null);
 
+    //clear upload file name to make sure same file can re-upload until refresh page
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
+
     const formData = new FormData();
     formData.append("file", file);
 
     try {
-      const response = await fetch("/api/upload", {
+      const response = await fetch(API_ROUTES.UPLOAD_DOCUMENT, {
         method: "POST",
         body: formData,
         headers: {
@@ -85,13 +91,19 @@ export default function UploadArea() {
       setSelectedFile(null);
       setUploadResult("success");
       setShowNotification(true);
-      console.log("Upload successful");
-    } catch (err: any) {
-      setError(err.message || t("upload_failed"));
-      setUploading(false);
-      setUploadResult("error");
-      setShowNotification(true);
-      console.log("Upload f");
+      // Reset the file input's value.
+      // This is necessary because the browser suppresses the 'onChange' event
+      // if the user selects the exact same file path again without a page refresh.
+      if (inputRef.current) {
+        inputRef.current.value = "";
+      }
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : t("upload_failed");
+      setError(errorMessage);
+      if (inputRef.current) {
+        inputRef.current.value = "";
+      }
     }
   };
 
@@ -142,17 +154,25 @@ export default function UploadArea() {
 
           {/* button text */}
           <button
+            disabled={uploading}
             type="button"
-            className="inline-flex rounded-full px-8 py-2 font-medium cursor-pointer
-                       bg-sky-500 hover:bg-sky-600 text-white shadow transition mt-8"
+            className={`
+                inline-flex rounded-full px-8 py-2 font-medium 
+                shadow transition mt-8 
+             ${
+               uploading
+                 ? "bg-gray-400 cursor-not-allowed"
+                 : "bg-sky-500 hover:bg-sky-600 cursor-pointer text-white"
+             }
+           `}
           >
-            {t("button")}
+            {uploading ? t("uploading") : t("button")}
           </button>
 
           <input
             ref={inputRef}
             type="file"
-            accept="application"
+            accept="application/pdf"
             multiple
             className="hidden"
             onChange={handleChange}

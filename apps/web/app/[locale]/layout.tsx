@@ -66,6 +66,12 @@ export default async function RootLayout({
   return (
     <html lang={locale}>
       <body>
+        {/*
+        NextIntlClientProvider is a built-in component from next-intl
+        that provides i18n context to the React component tree.
+        It supplies the locale and messages to other components,
+        enabling them to use i18n function. 
+        */}
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Shell locale={locale}>{children}</Shell>
         </NextIntlClientProvider>

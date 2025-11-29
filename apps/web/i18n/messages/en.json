@@ -12,6 +12,7 @@
   "upload": {
     "tips": "Click to upload, or drag PDF here",
     "button": "upload PDF",
+    "uploading": "uploading...",
     "upload_successed": "File uploaded successfully!",
     "upload_failed": "Error uploading the file!",
     "invalid_type": "Please upload a PDF file",
