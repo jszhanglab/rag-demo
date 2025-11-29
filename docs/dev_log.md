@@ -21,3 +21,11 @@
 
 ## 2025-11-21
 - Completed the upload layout.
+
+## 2025-11-27
+- Completed frontend (Next.js) integration with backend (FastAPI).
+- Implemented the first successful data-fetch flow, verifying end-to-end communication between the web app and the API service.
+
+## 2025-11-29
+- Refactored the API structure for monorepo architecture.
+- Created a shared apiRoutes.json under packages/common to centralize API route definitions used by both frontend and backend.

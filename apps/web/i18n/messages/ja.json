@@ -12,6 +12,7 @@
   "upload": {
     "tips": "クリックしてアップロード、またはここにPDFをドラッグ",
     "button": "PDFをアップロード",
+    "uploading": "アップロード中...",
     "upload_successed": "ファイルが正常にアップロードされました！",
     "upload_failed": "ファイルのアップロード中にエラーが発生しました！",
     "invalid_type": "PDFファイルのみしてください",
