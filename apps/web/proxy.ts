@@ -1,5 +1,5 @@
 /**
- * --- 2025/11/23 change this file's name to proxy.ts as middleware has been deprecated since Next.js 16 ---
+ * --- 2025/11/23 Renaming this file to proxy.ts as middleware has been deprecated since Next.js 16 ---
  * middleware.ts is a built-in feature of Next.js that runs before any route or page.
  * It’s used for authentication, i18n, redirects, logging, etc.
  * The matcher defines which paths it applies to.
@@ -33,11 +33,11 @@ export default async function middleware(request: NextRequest) {
   if (isApiRequest) {
     const API_BASE_URL = "http://127.0.0.1:8000";
 
-    // remove '/api'
+    // remove '/api' prefix
     const targetPath = url.pathname.replace("/api", "");
 
     const targetUrl = new URL(targetPath, API_BASE_URL);
-    //get all the search parameters
+    //Forward all the search parameters
     url.searchParams.forEach((value, key) => {
       targetUrl.searchParams.set(key, value);
     });
@@ -57,7 +57,7 @@ export default async function middleware(request: NextRequest) {
     return response;
   }
 
-  // Not Api reques should use i18n
+  // Non-API requests should use i18n
   const response = handleI18nRouting(request);
 
   return response;
