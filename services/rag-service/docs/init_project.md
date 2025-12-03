@@ -13,3 +13,12 @@ venv\Scripts\activate
 # run service
 # 'reload' is used for hot reloading.
 uvicorn main:app --reload
+
+
+# dependencies management
+poetry init 
+poetry install # dependencies install or update
+poetry show # show all of the dependencies
+poetry env info # show Virtualenv
+
+poetry run uvicorn app.main:app --reload --port 8000

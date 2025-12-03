@@ -1,0 +1,33 @@
+[project]
+name = "rag-service"
+version = "0.1.0"
+description = "Retrieval-Augmented Generation (RAG) backend service built by FastAPI for handling document processing, vectorization, and query generation."
+authors = [
+    {name = "jason zhang"}
+]
+license = {text = "MIT License"}
+readme = "README.md"
+requires-python = ">=3.11,<4.0.0"
+dependencies = [
+    "fastapi (>=0.123.2,<0.124.0)",
+    "uvicorn (>=0.38.0,<0.39.0)",
+    "pydantic (>=2.12.5,<3.0.0)",
+    "langchain (>=1.1.0,<2.0.0)",
+    "pydantic-settings (>=2.12.0,<3.0.0)",
+    "toml (>=0.10.2,<0.11.0)",
+    "python-multipart (>=0.0.20,<0.0.21)"
+]
+
+[dependency-groups]
+dev = [
+    "pytest (>=9.0.1,<10.0.0)",
+    "black (>=25.11.0,<26.0.0)",
+    "mypy (>=1.19.0,<2.0.0)"
+]
+
+[tool.poetry]
+package-mode = false
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
