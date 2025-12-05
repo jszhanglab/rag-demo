@@ -5,7 +5,7 @@ from fastapi import UploadFile
 
 UPLOAD_DIR = Path(__file__).resolve().parent.parent / "uploaded_files"
 
-# make directory is not exist
+# make directory if is not exist
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 def save_uploaded_file(file: UploadFile):

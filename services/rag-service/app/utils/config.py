@@ -40,6 +40,7 @@ try:
 except FileNotFoundError:
     PROJECT_METADATA = {}
 
+#'BaseSettings' is core function of Pydantic for fetching configuration from .env automatically
 class Settings(BaseSettings):
     # model_config is used for telling Pydantic where to find the .env file.
     # Pydantic will automatically load and cast variables from the .env file.
