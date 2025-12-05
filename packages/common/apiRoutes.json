@@ -1,3 +1,5 @@
 {
-  "UPLOAD_DOCUMENT": "/upload"
+  "UPLOAD_DOCUMENT": "/upload",
+  "Handle_OCR": "/orc",
+  "GET_FILE_LIST": "/file_list"
 }
