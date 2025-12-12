@@ -44,3 +44,11 @@
 - Troubleshot PaddleOCR initialization issues
 - Resolved VSCode/Poetry environment inconsistencies
 - Cleaned up backend structure to ensure stable module imports
+
+## 2025-12-12
+- Completed file upload service and repository implementation.
+  - Built ORM class for document handling.
+  - Implement Sqlalchemy ORM framework for database operation.
+  - Developed the document repository for managing file metadata.
+- Temporarily use a mock user on backend before auth is implemented.
+- Fixed frontend upload bug that prevented correct error tips from showing.
