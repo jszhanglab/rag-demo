@@ -84,7 +84,7 @@ export default function UploadArea() {
       });
 
       if (!response.ok) {
-        throw new Error();
+        throw new Error(t("upload_failed"));
       }
 
       setUploading(false);
@@ -98,9 +98,15 @@ export default function UploadArea() {
         inputRef.current.value = "";
       }
     } catch (err) {
+      setUploading(false);
+      setUploadResult("error");
+      setShowNotification(true);
       const errorMessage =
-        err instanceof Error ? err.message : t("upload_failed");
+        err instanceof Error && err.message !== ""
+          ? err.message
+          : t("upload_failed");
       setError(errorMessage);
+
       if (inputRef.current) {
         inputRef.current.value = "";
       }
