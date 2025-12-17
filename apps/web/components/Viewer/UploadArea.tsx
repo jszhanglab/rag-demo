@@ -1,11 +1,13 @@
+// apps\web\components\Viewer\UploadArea.tsx
 "use client";
 
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { API_ROUTES } from "@/constants/apiRoutes";
+import { mutate } from "swr";
 
 export default function UploadArea() {
-  const t = useTranslations("upload"); //i18n
+  const i18n = useTranslations("upload"); //i18n
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -46,13 +48,13 @@ export default function UploadArea() {
 
   const handleFileValidation = (file: File) => {
     if (file.type !== "application/pdf") {
-      setError(t("invalid_type"));
+      setError(i18n("invalid_type"));
       setShowNotification(true);
       setUploadResult("error");
       return;
     }
     if (file.size > 10 * 1024 * 1024) {
-      setError(t("invalid_size"));
+      setError(i18n("invalid_size"));
       setShowNotification(true);
       setUploadResult("error");
       return;
@@ -84,8 +86,16 @@ export default function UploadArea() {
       });
 
       if (!response.ok) {
-        throw new Error(t("upload_failed"));
+        throw new Error(i18n("upload_failed"));
       }
+
+      /**
+       * `mutate` works as a cache-based synchronization mechanism in SWR.
+       * By invalidating the cache for `API_ROUTES.GET_FILE_LIST`, it forces
+       * all components using this key to refetch the data, which effectively
+       * keeps different parts of the UI in sync without direct component communication.
+       */
+      await mutate(API_ROUTES.GET_FILE_LIST);
 
       setUploading(false);
       setSelectedFile(null);
@@ -104,7 +114,7 @@ export default function UploadArea() {
       const errorMessage =
         err instanceof Error && err.message !== ""
           ? err.message
-          : t("upload_failed");
+          : i18n("upload_failed");
       setError(errorMessage);
 
       if (inputRef.current) {
@@ -136,10 +146,10 @@ export default function UploadArea() {
             } p-3 rounded-lg fixed top-10 left-1/2 transform -translate-x-1/2 transition-opacity opacity-100`}
           >
             {uploadResult === "success"
-              ? t("upload_successed")
+              ? i18n("upload_successed")
               : error != null
               ? error
-              : t("upload_failed")}
+              : i18n("upload_failed")}
           </div>
         )}
         <div
@@ -156,7 +166,9 @@ export default function UploadArea() {
           </div>
 
           {/* tips */}
-          <p className="text-lg font-medium text-gray-800 mb-1">{t("tips")}</p>
+          <p className="text-lg font-medium text-gray-800 mb-1">
+            {i18n("tips")}
+          </p>
 
           {/* button text */}
           <button
@@ -172,7 +184,7 @@ export default function UploadArea() {
              }
            `}
           >
-            {uploading ? t("uploading") : t("button")}
+            {uploading ? i18n("uploading") : i18n("button")}
           </button>
 
           <input

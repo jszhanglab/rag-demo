@@ -17,5 +17,11 @@
     "upload_failed": "ファイルのアップロード中にエラーが発生しました！",
     "invalid_type": "PDFファイルのみしてください",
     "invalid_size": "PDFのサイズが大きすぎます"
+  },
+  "sidebar": {
+    "loading": "読み込み中...",
+    "fail": "ファイルの読み込みに失敗しました。もう一度お試しください。",
+    "delete_btn": "削除する",
+    "rename_btn": "名前を変更"
   }
 }

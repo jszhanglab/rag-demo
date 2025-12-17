@@ -17,5 +17,11 @@
     "upload_failed": "文件上传出错！",
     "invalid_type": "仅支持PDF格式",
     "invalid_size": "上传的PDF文件太大"
+  },
+  "sidebar": {
+    "loading": "加载中...",
+    "fail": "文件列表加载失败，请重试。.",
+    "delete_btn": "删除",
+    "rename_btn": "重命名"
   }
 }

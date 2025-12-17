@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from .utils.config import settings
 from .api.upload import router as upload_router
 from .api.ocr import router as ocr_router
+from .api.documents import router as get_documents_router
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -23,3 +24,4 @@ app.add_middleware(
 # include_router is used for integrating different api module into the main FastAPI application.
 app.include_router(upload_router)
 app.include_router(ocr_router)
+app.include_router(get_documents_router)

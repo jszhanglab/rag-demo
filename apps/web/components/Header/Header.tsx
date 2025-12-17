@@ -16,7 +16,7 @@ export default function Header({
 }: HeaderProps) {
   const router = useRouter();
   const pathname = usePathname();
-  const t = useTranslations("Header");
+  const i18n = useTranslations("Header");
 
   const handleLocaleChange = (nextLocale: string) => {
     if (!pathname) {
@@ -35,8 +35,8 @@ export default function Header({
   };
 
   const sidebarTooltip = sidebarOpen
-    ? t("sidebar.collapse")
-    : t("sidebar.expand");
+    ? i18n("sidebar.collapse")
+    : i18n("sidebar.expand");
 
   return (
     <header className="h-[var(--header-h)] flex items-center justify-between px-4 border-b border-slate-200 bg-white">

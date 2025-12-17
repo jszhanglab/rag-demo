@@ -52,3 +52,10 @@
   - Developed the document repository for managing file metadata.
 - Temporarily use a mock user on backend before auth is implemented.
 - Fixed frontend upload bug that prevented correct error tips from showing.
+
+## 2025-12-16
+- Implemented SWR for efficient communication between different components in the project. This improves data fetching and synchronization between UI components.
+
+## 2025-12-17
+- Completed around 50% of the Sidebar component, focusing on UI/UX and interactive elements. Realized the importance of prioritizing the chunking and embedding services before completing the Sidebar.
+- Cleaned up the mock user fetch method, ensuring a cleaner and more efficient mock data handling for the development environment.

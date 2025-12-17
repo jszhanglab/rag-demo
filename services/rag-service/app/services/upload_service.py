@@ -12,12 +12,6 @@ UPLOAD_DIR = Path(__file__).resolve().parent.parent / "uploaded_files"
 # make directory if is not exist
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-# Upload success mock
-MOCK_USER_ID = UUID('00000000-0000-0000-0000-000000000001')
-
-# TODO Upload fail mock
-MOCK_USER_ID_FAIL = UUID('10000000-0000-0000-0000-000000000001')
-
 def save_uploaded_file(file: UploadFile,db: Session,user_id: UUID,source: str):
     try:
         # Step 1: Save file to the storage
@@ -29,7 +23,7 @@ def save_uploaded_file(file: UploadFile,db: Session,user_id: UUID,source: str):
         # Step 2:Save file metadata to db
         document_repo = DocumentRepository(db)
         db_document = document_repo.create_document(
-            user_id=MOCK_USER_ID_FAIL,
+            user_id=user_id,
             filename=file.filename,
             mime_type=file.content_type,  # MIME type of the uploaded file
             file_size_bytes=file.size,    # Size of the uploaded file

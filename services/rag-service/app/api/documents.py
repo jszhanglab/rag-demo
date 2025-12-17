@@ -1,9 +1,8 @@
-# rag-service/app/api/upload.py
+# rag-service/app/api/documents.py
 
-from uuid import UUID
 from fastapi import APIRouter, Depends, UploadFile
 from app.utils.config import API_ROUTES
-from app.services.upload_service import save_uploaded_file
+from app.services.ducument_service import get_document_list
 from app.db.session import get_db
 from sqlalchemy.orm import Session
 from app.utils.mock.mock_user import get_current_user
@@ -11,9 +10,9 @@ from app.utils.mock.mock_user import get_current_user
 # APIRouter allows splitting API endpoints into modular components.
 router = APIRouter()
 
-@router.post(API_ROUTES['UPLOAD_DOCUMENT'])
-async def upload_file(file: UploadFile,db: Session= Depends(get_db),source: str = "upload"):
+@router.get(API_ROUTES['GET_FILE_LIST'])
+async def document_list(db: Session = Depends(get_db)):
     mock_user_id = get_current_user()
-    result = save_uploaded_file(file,db,mock_user_id,source)
-    return result
+    document_list = get_document_list(db, mock_user_id)
+    return {"document_list": document_list}
     

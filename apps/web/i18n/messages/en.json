@@ -17,5 +17,15 @@
     "upload_failed": "Error uploading the file!",
     "invalid_type": "Please upload a PDF file",
     "invalid_size": "uPlease upload a PDF file that is less than 10MB"
+  },
+  "sidebar": {
+    "loading": "Loading...",
+    "fail": "Failed to load files. Please try again.",
+    "delete_btn": "delete",
+    "rename_btn": "rename",
+    "dialog_text_delete": "Delete chat",
+    "dialog_text_rename": "Rename chat",
+    "dialog_ok_btn": "OK",
+    "dialog_cancel_btn": "Cancel"
   }
 }

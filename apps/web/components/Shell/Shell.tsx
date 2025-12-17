@@ -20,6 +20,12 @@ export default function Shell({
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+
+  const handleFileUpload = (newFile: File) => {
+    setUploadedFiles((prevFiles) => [...prevFiles, newFile]);
+  };
+
   return (
     <div className="min-h-screen bg-slate-100 text-slate-900">
       <div className="h-[var(--header-h)] border-b bg-white shadow-sm">
