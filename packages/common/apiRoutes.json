@@ -1,0 +1,4 @@
+{
+  "UPLOAD_DOCUMENT": "/upload",
+  "GET_FILE_LIST": "/file_list"
+}
