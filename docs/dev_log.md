@@ -59,3 +59,14 @@
 ## 2025-12-17
 - Completed around 50% of the Sidebar component, focusing on UI/UX and interactive elements. Realized the importance of prioritizing the chunking and embedding services before completing the Sidebar.
 - Cleaned up the mock user fetch method, ensuring a cleaner and more efficient mock data handling for the development environment.
+
+## 2025-12-20
+- Completed OCR flow by PaddleOCR.
+
+## 2025-12-25
+- Refactored the pipeline flow to ensure smooth coordination between tasks such as OCR, chunking, and embedding.
+- Manually implemented the LangChain structure, handling text splitting and processing logic to increase flexibility and scalability in document processing.
+
+## 2025-12-30
+- Completed chunk flow by langchain-text-splitters library.
+

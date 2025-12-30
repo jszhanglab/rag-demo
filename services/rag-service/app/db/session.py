@@ -5,8 +5,10 @@ from sqlalchemy.orm import sessionmaker
 import os
 from dotenv import load_dotenv
 from pathlib import Path
+from contextlib import contextmanager
+from app.utils.config import get_dotenv_path
 
-DOTENV_PATH = Path(__file__).resolve().parent.parent / 'config' / '.env'
+DOTENV_PATH = get_dotenv_path()
 
 load_dotenv(dotenv_path=DOTENV_PATH)
 SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL_DEV")
@@ -16,10 +18,26 @@ engine = create_engine(SQLALCHEMY_DATABASE_URL, pool_size=10, max_overflow=20)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# create db session
+# Used by FastAPI, lifecycle is one single Http request
 def get_db():
     db = SessionLocal()
     try:
         yield db
     finally:
         db.close()
+
+# @contextmanager transforms a generator function into a Context Manager object. 
+# This object automatically implements the __enter__() and __exit__() methods, 
+# allowing the function to be used with the 'with' statement.
+@contextmanager
+# Used by background tasks.
+def session_scope():
+    session = SessionLocal()
+    try:
+        yield session
+        session.commit()
+    except Exception:
+        session.rollback()
+        raise
+    finally:
+        session.close()

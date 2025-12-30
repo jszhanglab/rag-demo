@@ -5,6 +5,7 @@ from fastapi import UploadFile,HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
 from app.repositories.document_repository import DocumentRepository
+from app.constants.status import DocumentStatus
 from uuid import UUID
 
 UPLOAD_DIR = Path(__file__).resolve().parent.parent / "uploaded_files"
@@ -23,11 +24,13 @@ def save_uploaded_file(file: UploadFile,db: Session,user_id: UUID,source: str):
         # Step 2:Save file metadata to db
         document_repo = DocumentRepository(db)
         db_document = document_repo.create_document(
-            user_id=user_id,
-            filename=file.filename,
-            mime_type=file.content_type,  # MIME type of the uploaded file
-            file_size_bytes=file.size,    # Size of the uploaded file
-            source=source                 # Source can be 'upload', 'api', or 'url'
+            user_id = user_id,
+            filename = file.filename,
+            file_path = file_location,
+            mime_type = file.content_type,  # MIME type of the uploaded file
+            file_size_bytes = file.size,    # Size of the uploaded file
+            source = source,                 # Source can be 'upload', 'api', or 'url'
+            status = DocumentStatus.UPLOADED
         )
         
         return {"status": "success", "filename": file.filename, "document_id": db_document.id,"message": "File uploaded successfully!"}

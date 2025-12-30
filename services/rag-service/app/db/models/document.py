@@ -13,6 +13,7 @@ class Document(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)  # document owner
     filename = Column(String(255), nullable=False)
+    file_path = Column(String, nullable=False)
     mime_type = Column(String(100))
     file_size_bytes = Column(Integer)
     status = Column(String(50), nullable=False)  # uploaded | processing | ready | failed
@@ -29,3 +30,10 @@ class Document(Base):
     created_by_user = relationship("User", foreign_keys=[created_by_user_id], backref="created_documents")
     updated_by_user = relationship("User", foreign_keys=[updated_by_user_id], backref="updated_documents")
     deleted_by_user = relationship("User", foreign_keys=[deleted_by_user_id], backref="deleted_documents")
+
+    ocr_result = relationship(
+        "OCRResult",
+        back_populates="document",
+        uselist=False,
+        cascade="all, delete-orphan",
+    )

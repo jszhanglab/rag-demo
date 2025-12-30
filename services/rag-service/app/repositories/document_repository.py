@@ -1,6 +1,6 @@
 # app/repositories/document_repository.py
 
-from sqlalchemy import func
+from sqlalchemy import func, update
 from sqlalchemy.orm import Session
 from app.db.models.user import User
 from app.db.models.document import Document
@@ -12,13 +12,22 @@ class DocumentRepository:
     def __init__(self, db: Session):
         self.db = db
 
-    def create_document(self, user_id: UUID, filename: str, mime_type: str, file_size_bytes: int, source: str) -> Document:
+    def create_document(
+            self, 
+            user_id: UUID, 
+            filename: str, 
+            file_path: str, 
+            mime_type: str, 
+            file_size_bytes: int, 
+            source: str,status:str
+        ) -> Document:
         db_document = Document(
             user_id=user_id,
             filename=filename,
+            file_path=file_path,
             mime_type=mime_type,
             file_size_bytes=file_size_bytes,
-            status="uploaded",
+            status=status,
             source=source
         )
         self.db.add(db_document)
@@ -26,10 +35,10 @@ class DocumentRepository:
         self.db.refresh(db_document)
         return db_document
 
-    def get_document_by_id(self, document_id: UUID) -> Optional[Document]:
+    def get_by_id(self, document_id: UUID) -> Optional[Document]:
         return self.db.query(Document).filter(Document.id == document_id).first()
 
-    def get_documents_by_user_id(self, user_id: UUID) -> List[Document]:
+    def get_by_user_id(self, user_id: UUID) -> List[Document]:
         return self.db.query(Document).filter(Document.user_id == user_id).all()
 
     def update_document(self, document_id: UUID, status: str, error_message: Optional[str] = None) -> Optional[Document]:
@@ -41,11 +50,21 @@ class DocumentRepository:
             self.db.refresh(db_document)
             return db_document
         return None
+    
+    # def mark_status(self, document_id: UUID, status: str):
+    #     db_document = self.db.query(Document).filter(Document.id == document_id).first()
+    #     if db_document:
+    #        db_document.status = status
+    #        self.db.commit()
+    #        self.db.refresh(db_document)
+    #        return db_document
+    #     return
 
-    def delete_document(self, document_id: UUID) -> bool:
-        db_document = self.db.query(Document).filter(Document.id == document_id).first()
-        if db_document:
-            db_document.deleted_at = func.now()
-            self.db.commit()
-            return True
-        return False
+    def mark_status(self, document_id: UUID, status: str):
+        self.db.execute(
+            update(Document)
+            .where(Document.id == document_id)
+            .values(status=status)
+        )   
+
+

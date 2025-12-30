@@ -5,6 +5,10 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 import json
 import toml
 
+#----- .env path --------------------
+def get_dotenv_path() -> Path:
+    return Path(__file__).resolve().parent.parent / 'config' / '.env'
+
 #----- Monorepo Root Path Helpers --------------------
 
 def find_repo_root(start: Path) -> Path:
@@ -45,17 +49,23 @@ class Settings(BaseSettings):
     # model_config is used for telling Pydantic where to find the .env file.
     # Pydantic will automatically load and cast variables from the .env file.
     model_config = SettingsConfigDict(
-        env_file=REPO_ROOT / "services" / "rag-service" / "config" / ".env",
+        env_file=get_dotenv_path(),
         extra='ignore' # ignore configuration variables not defined in the model
     )
-    PROJECT_NAME: str = PROJECT_METADATA.get("name")
-    PROJECT_VERSION: str = PROJECT_METADATA.get("version")
-    PROJECT_DESCRIPTION: str = PROJECT_METADATA.get("description")
+    PROJECT_NAME: str = PROJECT_METADATA.get("name", "rag-service")
+    PROJECT_VERSION: str = PROJECT_METADATA.get("version", "0.1.0")
+    PROJECT_DESCRIPTION: str = PROJECT_METADATA.get("description", "")
+
     # CORS configuration be loaded from .env or environment variables automatically by Pydantic
     CORS_ORIGINS: List[str] = []
+    #Chunk
+    MAX_CHUNK_SIZE: int = 800
+    CHUNK_OVERLAP: int = 50
 
     #TODO
     #VECTOR_DB_URL:  
     #LLM_MODEL_NAME: 
 
-settings = Settings()    
+settings = Settings()
+
+
