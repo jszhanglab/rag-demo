@@ -20,6 +20,14 @@ class ChunkRepository:
         )
         session.add(chunk)
         session.commit()
+
+    def list_by_document_id(self, document_id: str) -> List[Chunk]:
+        return (
+            self.db.query(Chunk)
+            .filter(Chunk.document_id == document_id)
+            .order_by(Chunk.chunk_index.asc())
+            .all()
+        )    
         
     def bulk_insert(self, chunk_records: List[Dict[str, Any]]) -> None:
         if not chunk_records:

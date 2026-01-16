@@ -70,3 +70,15 @@
 ## 2025-12-30
 - Completed chunk flow by langchain-text-splitters library.
 
+## 2025-12-31
+- Refactor chunk token calculation using the Transformers tokenizer.
+
+## 2026-01-02
+- Implemented vector store abstraction and embedding repository.
+- Defined metadata schema for chunk-level vector indexing.
+
+## 2026-01-16
+- Completed the end-to-end embedding pipeline (OCR → Chunk → Embedding).
+- Integrated embedded Chroma as a local vector index with persistent storage.
+- Successfully indexed chunk embeddings and metadata to disk.
+
