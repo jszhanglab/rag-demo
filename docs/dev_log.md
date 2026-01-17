@@ -82,3 +82,11 @@
 - Integrated embedded Chroma as a local vector index with persistent storage.
 - Successfully indexed chunk embeddings and metadata to disk.
 
+## 2026-01-17
+- Completed the search pipeline
+  - Implemented the full search pipeline including embedding query, vector search with Chroma, and retrieving relevant chunk data from PostgreSQL.
+  - Successfully integrated vector database and chunk repository to provide accurate search results.
+- Resolved .env file configuration issue
+  - Addressed issues with environment variable loading and ensured sensitive information (like database credentials) is correctly loaded from the .env file using Pydantic.
+  - Improved .env management for different environments (development/production).
+

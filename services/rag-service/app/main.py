@@ -5,6 +5,7 @@ from .utils.config import settings
 from .api.upload import router as upload_router
 from .api.ocr import router as ocr_router
 from .api.documents import router as get_documents_router
+from .api.search import router as search_router
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -25,3 +26,4 @@ app.add_middleware(
 app.include_router(upload_router)
 app.include_router(ocr_router)
 app.include_router(get_documents_router)
+app.include_router(search_router)

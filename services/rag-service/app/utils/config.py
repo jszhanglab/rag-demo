@@ -61,10 +61,12 @@ class Settings(BaseSettings):
     #Chunk
     MAX_CHUNK_SIZE: int = 800
     CHUNK_OVERLAP: int = 50
-
-    #TODO
-    #VECTOR_DB_URL:  
-    #LLM_MODEL_NAME: 
+    #RDB
+    DATABASE_URL_DEV:str
+    #VDB
+    VECTOR_DB_URL:str
+    #LLM
+    LLM_MODEL_DEV:str="sentence-transformers/all-MiniLM-L6-v2"
 
 settings = Settings()
 

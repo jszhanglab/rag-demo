@@ -7,11 +7,12 @@ from dotenv import load_dotenv
 from pathlib import Path
 from contextlib import contextmanager
 from app.utils.config import get_dotenv_path
+from app.utils.config import settings
 
 DOTENV_PATH = get_dotenv_path()
 
 load_dotenv(dotenv_path=DOTENV_PATH)
-SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL_DEV")
+SQLALCHEMY_DATABASE_URL = settings.DATABASE_URL_DEV
 
 # create a connection with db
 engine = create_engine(SQLALCHEMY_DATABASE_URL, pool_size=10, max_overflow=20)

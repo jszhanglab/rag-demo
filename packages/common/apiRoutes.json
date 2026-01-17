@@ -1,4 +1,5 @@
 {
   "UPLOAD_DOCUMENT": "/upload",
-  "GET_FILE_LIST": "/file_list"
+  "GET_FILE_LIST": "/file_list",
+  "SEARCH_DOCUMENT": "/search"
 }

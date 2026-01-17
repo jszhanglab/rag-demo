@@ -4,7 +4,9 @@ from __future__ import annotations
 
 from typing import List, Optional
 from sentence_transformers import SentenceTransformer
+from app.utils.config import settings
 
+LLM_MODEL_DEV = settings.LLM_MODEL_DEV
 
 class EmbeddingService:
     """
@@ -18,7 +20,7 @@ class EmbeddingService:
 
     def __init__(
         self,
-        model_name: str = "sentence-transformers/all-MiniLM-L6-v2",
+        model_name: str = LLM_MODEL_DEV,
         normalize: bool = True,
         batch_size: int = 32,
         device: Optional[str] = None,  # e.g. "cpu" or "cuda"

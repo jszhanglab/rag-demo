@@ -11,7 +11,9 @@ from app.db.session import session_scope
 from app.constants.status import DocumentStatus
 from app.services.ocr_service import run_ocr
 from app.services.chunk_service import chunk_text
+from app.utils.config import settings
 from transformers import AutoTokenizer
+import os
 
 def process_document_pipeline(document_id: str, lang: str = "en") -> None:
     doc_id = UUID(document_id)
@@ -24,6 +26,9 @@ def process_document_pipeline(document_id: str, lang: str = "en") -> None:
     """
 
     tokenizer = AutoTokenizer.from_pretrained('sentence-transformers/all-MiniLM-L6-v2')
+
+    VECTOR_DB_URL = settings.VECTOR_DB_URL
+    LLM_MODEL_DEV = settings.LLM_MODEL_DEV
 
     try:
         with session_scope() as db:
@@ -104,7 +109,7 @@ def process_document_pipeline(document_id: str, lang: str = "en") -> None:
 
         # 2) Compute embeddings (heavy, no DB session)
         embedding_svc = EmbeddingService(
-            model_name="sentence-transformers/all-MiniLM-L6-v2",
+            model_name=LLM_MODEL_DEV,
             normalize=True,
             batch_size=32,
             device=None,
@@ -128,8 +133,8 @@ def process_document_pipeline(document_id: str, lang: str = "en") -> None:
 
         # 4) Upsert to Chroma (index layer)
         chroma_repo = ChromaVectorRepository(
-            persist_dir="uploaded_files/chroma",  # TODO move to config/env
-            collection_name="rag_chunks",
+            persist_dir=VECTOR_DB_URL,
+            collection_name="rag_chunks", #TODO
         )
         chroma_repo.upsert_chunks(
             chunk_ids=[x["id"] for x in chunk_payloads],  # ids == chunk_id

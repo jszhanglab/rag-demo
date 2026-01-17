@@ -27,6 +27,15 @@ class ChunkRepository:
             .filter(Chunk.document_id == document_id)
             .order_by(Chunk.chunk_index.asc())
             .all()
+        )
+
+    def get_by_ids(self, chunk_ids: List[str]) -> List[Chunk]:
+        if not chunk_ids:
+            return []
+        return (
+            self.db.query(Chunk)
+            .filter(Chunk.id.in_(chunk_ids))
+            .all()
         )    
         
     def bulk_insert(self, chunk_records: List[Dict[str, Any]]) -> None:
