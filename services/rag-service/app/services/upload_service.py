@@ -33,7 +33,7 @@ def save_uploaded_file(file: UploadFile,db: Session,user_id: UUID,source: str):
             status = DocumentStatus.UPLOADED
         )
         
-        return {"status": "success", "filename": file.filename, "document_id": db_document.id,"message": "File uploaded successfully!"}
+        return {"document_status": db_document.status, "filename": file.filename, "document_id": db_document.id}
     
     except SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail="Database operation failed: " + str(e))

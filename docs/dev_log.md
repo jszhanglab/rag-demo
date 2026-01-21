@@ -90,3 +90,7 @@
   - Addressed issues with environment variable loading and ensured sensitive information (like database credentials) is correctly loaded from the .env file using Pydantic.
   - Improved .env management for different environments (development/production).
 
+## 2026-01-21
+- Implemented status-driven UI updates and refactored document-related APIs.
+- Resolved several bugs in the embedding pipeline.
+- Improved frontend–backend alignment by introducing concurrent processing.

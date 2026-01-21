@@ -13,7 +13,7 @@ export default function UploadArea() {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [uploadResult, setUploadResult] = useState<"success" | "error" | null>(
-    null
+    null,
   );
   const [showNotification, setShowNotification] = useState(false);
 
@@ -53,6 +53,7 @@ export default function UploadArea() {
       setUploadResult("error");
       return;
     }
+    //TODO file size
     if (file.size > 10 * 1024 * 1024) {
       setError(i18n("invalid_size"));
       setShowNotification(true);
@@ -141,15 +142,15 @@ export default function UploadArea() {
               uploadResult === "success"
                 ? "bg-green-100 text-green-800"
                 : uploadResult === "error"
-                ? "bg-red-100 text-red-800"
-                : ""
+                  ? "bg-red-100 text-red-800"
+                  : ""
             } p-3 rounded-lg fixed top-10 left-1/2 transform -translate-x-1/2 transition-opacity opacity-100`}
           >
             {uploadResult === "success"
               ? i18n("upload_successed")
               : error != null
-              ? error
-              : i18n("upload_failed")}
+                ? error
+                : i18n("upload_failed")}
           </div>
         )}
         <div
