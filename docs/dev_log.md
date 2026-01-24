@@ -94,3 +94,7 @@
 - Implemented status-driven UI updates and refactored document-related APIs.
 - Resolved several bugs in the embedding pipeline.
 - Improved frontend–backend alignment by introducing concurrent processing.
+
+## 2026-01-22
+- Fixed Swagger UI exposure issues in production environment.
+- Fixed the method for fetching .env configuration.

@@ -7,10 +7,14 @@ from .api.ocr import router as ocr_router
 from .api.documents import router as get_documents_router
 from .api.search import router as search_router
 
+is_dev = settings.ENV.lower() in ("dev", "develop", "development")
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.PROJECT_VERSION,
     description=settings.PROJECT_DESCRIPTION,
+    docs_url="/docs" if is_dev else None,
+    redoc_url="/redoc" if is_dev else None,
+    openapi_url="/openapi.json" if is_dev else None,
     #lifespan=lifespan
 )
 

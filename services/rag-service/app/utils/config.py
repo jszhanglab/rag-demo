@@ -1,6 +1,7 @@
 # rag-service/app/utils/config.py
 from pathlib import Path
-from typing import List
+from typing import Any, List
+from pydantic import field_validator, root_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 import json
 import toml
@@ -46,6 +47,8 @@ except FileNotFoundError:
 
 #'BaseSettings' is core function of Pydantic for fetching configuration from .env automatically
 class Settings(BaseSettings):
+    ENV:str
+
     # model_config is used for telling Pydantic where to find the .env file.
     # Pydantic will automatically load and cast variables from the .env file.
     model_config = SettingsConfigDict(
@@ -57,7 +60,8 @@ class Settings(BaseSettings):
     PROJECT_DESCRIPTION: str = PROJECT_METADATA.get("description", "")
 
     # CORS configuration be loaded from .env or environment variables automatically by Pydantic
-    CORS_ORIGINS: List[str] = []
+    CORS_ORIGINS: Any = []
+
     #Chunk
     MAX_CHUNK_SIZE: int = 800
     CHUNK_OVERLAP: int = 50
@@ -67,6 +71,20 @@ class Settings(BaseSettings):
     VECTOR_DB_URL:str
     #LLM
     LLM_MODEL_DEV:str="sentence-transformers/all-MiniLM-L6-v2"
+
+    @field_validator("CORS_ORIGINS", mode="before")
+    @classmethod
+    def assemble_cors_origins(cls, v: Any) -> Any:
+        if isinstance(v, str):
+            if not v.strip():
+                return []
+            return [i.strip() for i in v.split(",")]
+        return v
+
+    model_config = SettingsConfigDict(
+        env_file=get_dotenv_path(),
+        extra='ignore'
+    )
 
 settings = Settings()
 
