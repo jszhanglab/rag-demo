@@ -10,6 +10,7 @@
 import { useState } from "react";
 import "@/styles/layout.css";
 import Header from "@/components/Header/Header";
+import { useSearchParams } from "next/navigation";
 
 export default function Shell({
   children,
@@ -20,11 +21,8 @@ export default function Shell({
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
-  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
-
-  const handleFileUpload = (newFile: File) => {
-    setUploadedFiles((prevFiles) => [...prevFiles, newFile]);
-  };
+  const sp = useSearchParams();
+  const docId = sp.get("doc");
 
   return (
     <div className="min-h-screen bg-slate-100 text-slate-900">
@@ -39,9 +37,13 @@ export default function Shell({
       <main
         className={[
           "min-h-[calc(100vh-var(--header-h))] grid divide-x divide-slate-200",
-          sidebarOpen
+          sidebarOpen && docId
             ? "grid-cols-[18rem_1fr_26rem]" // Sidebar | Viewer | Chat
-            : "grid-cols-[0px_1fr_26rem]",
+            : sidebarOpen && !docId
+              ? "grid-cols-[18rem_1fr_0rem]" // Sidebar | Viewer
+              : !sidebarOpen && docId
+                ? "grid-cols-[0px_1fr_26rem]" // Viewer | Chat
+                : "grid-cols-[0px_1fr_0rem]", // Viewer
         ].join(" ")}
       >
         {children}

@@ -11,3 +11,7 @@ def mark_status(db:Session,status:str):
     repo = DocumentRepository(db)
     repo.update_document()
     return
+
+def get_document_detail(db:Session,document_id:str):
+    repo = DocumentRepository(db)
+    return repo.get_by_id(document_id)

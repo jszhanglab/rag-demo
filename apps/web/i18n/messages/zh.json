@@ -23,5 +23,15 @@
     "fail": "文件列表加载失败，请重试。.",
     "delete_btn": "删除",
     "rename_btn": "重命名"
+  },
+  "fileProcessStatus": {
+    "uploaded": "已上传，等待 OCR 开始…",
+    "ocr_processing": "OCR 处理中…",
+    "ocr_done": "OCR 完成 ✅",
+    "chunk_done": "Chunk 完成 ✅",
+    "embedding_processing": "Embedding 处理中…",
+    "embedding_done": "全部处理完成 ✅",
+    "failed": "处理失败 ❌",
+    "default": "加载中..."
   }
 }

@@ -1,32 +1,24 @@
 "use client";
 import { useEffect, useState } from "react";
 import UploadArea from "./UploadArea";
+import PDFViewer from "./PDFViewer";
 
 type ViewerProps = {
   docId: string | null;
-  page: number;
+  //page: number;
+  onSelectDocId: (docId: string) => void;
 };
 
-export default function Viewer({ docId, page }: ViewerProps) {
-  const [html, setHtml] = useState<string>("");
-
-  useEffect(() => {
-    if (!docId) {
-      setHtml("");
-      return;
-    }
-
-    // Mock 预览内容
-    setHtml(
-      `<div style="padding:24px">Preview of <b>${docId}</b> — page ${page}</div>`
-    );
-  }, [docId, page]);
-
+export default function Viewer({ docId, onSelectDocId }: ViewerProps) {
   if (!docId) {
     return (
       <div className="h-full bg-white flex justify-center">
         <div className="mt-24">
-          <UploadArea></UploadArea>
+          <UploadArea
+            onUploaded={(newDocId) => {
+              onSelectDocId(newDocId);
+            }}
+          ></UploadArea>
         </div>
       </div>
     );
@@ -34,12 +26,7 @@ export default function Viewer({ docId, page }: ViewerProps) {
 
   return (
     <div className="h-full bg-white">
-      <div className="h-full p-6">
-        <div
-          className="text-sm text-slate-800"
-          dangerouslySetInnerHTML={{ __html: html }}
-        />
-      </div>
+      <PDFViewer key={docId} docId={docId} />
     </div>
   );
 }

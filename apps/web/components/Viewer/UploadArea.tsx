@@ -6,7 +6,11 @@ import { useEffect, useRef, useState } from "react";
 import { API_ROUTES } from "@/constants/apiRoutes";
 import { mutate } from "swr";
 
-export default function UploadArea() {
+type UploadAreaProps = {
+  onUploaded?: (docId: string) => void;
+};
+
+export default function UploadArea({ onUploaded }: UploadAreaProps) {
   const i18n = useTranslations("upload"); //i18n
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -90,6 +94,8 @@ export default function UploadArea() {
         throw new Error(i18n("upload_failed"));
       }
 
+      const data = await response.json();
+
       /**
        * `mutate` works as a cache-based synchronization mechanism in SWR.
        * By invalidating the cache for `API_ROUTES.GET_FILE_LIST`, it forces
@@ -97,6 +103,14 @@ export default function UploadArea() {
        * keeps different parts of the UI in sync without direct component communication.
        */
       await mutate(API_ROUTES.GET_FILE_LIST);
+
+      /**
+       * onUploaded?.() is a syntactic sugar since ES2020
+       * if (onUploaded !== JSON && onUploaded !== undefined) {
+       *     onUploaded(data.document_id);
+       *   }
+       */
+      onUploaded?.(data.document_id);
 
       setUploading(false);
       setSelectedFile(null);

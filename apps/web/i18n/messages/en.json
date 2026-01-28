@@ -16,7 +16,7 @@
     "upload_successed": "File uploaded successfully!",
     "upload_failed": "Error uploading the file!",
     "invalid_type": "Please upload a PDF file",
-    "invalid_size": "uPlease upload a PDF file that is less than 10MB"
+    "invalid_size": "Please upload a PDF file that is less than 10MB"
   },
   "sidebar": {
     "loading": "Loading...",
@@ -27,5 +27,15 @@
     "dialog_text_rename": "Rename chat",
     "dialog_ok_btn": "OK",
     "dialog_cancel_btn": "Cancel"
+  },
+  "fileProcessStatus": {
+    "uploaded": "Uploaded, waiting for OCR...",
+    "ocr_processing": "OCR processing...",
+    "ocr_done": "OCR completed ✅",
+    "chunk_done": "Chunking completed ✅",
+    "embedding_processing": "Embedding in progress...",
+    "embedding_done": "Processing finished ✅",
+    "failed": "Processing failed ❌",
+    "default": "Loading..."
   }
 }

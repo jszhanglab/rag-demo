@@ -3,13 +3,12 @@ import { useState } from "react";
 
 type ChatPanelProps = {
   docId: string | null;
-  threadId: string | null;
 };
 
-export default function ChatPanel({ docId, threadId }: ChatPanelProps) {
+export default function ChatPanel({ docId }: ChatPanelProps) {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<{ role: string; content: string }[]>(
-    []
+    [],
   );
 
   function handleSend() {
@@ -17,9 +16,7 @@ export default function ChatPanel({ docId, threadId }: ChatPanelProps) {
 
     setMessages((prev) => [...prev, { role: "user", content: input }]);
 
-    const reply = `Mock reply for docId=${docId ?? "none"}, threadId=${
-      threadId ?? "none"
-    }`;
+    const reply = `Mock reply for docId=none"`;
     setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
 
     setInput("");

@@ -23,5 +23,15 @@
     "fail": "ファイルの読み込みに失敗しました。もう一度お試しください。",
     "delete_btn": "削除する",
     "rename_btn": "名前を変更"
+  },
+  "fileProcessStatus": {
+    "uploaded": "アップロード完了、OCR開始待ち…",
+    "ocr_processing": "OCR処理中…",
+    "ocr_done": "OCR完了 ✅",
+    "chunk_done": "チャンク分割完了 ✅",
+    "embedding_processing": "ベクトル化処理中…",
+    "embedding_done": "すべての処理が完了しました ✅",
+    "failed": "処理に失敗しました ❌",
+    "default": "ローディング..."
   }
 }

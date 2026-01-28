@@ -98,3 +98,8 @@
 ## 2026-01-22
 - Fixed Swagger UI exposure issues in production environment.
 - Fixed the method for fetching .env configuration.
+
+## 2026-01-23~2026-01-28
+- Refactored the component structure and optimized the relationships between components.
+- Implemented a document status display in the layout, showing the processing status of uploaded files with polling updates.
+- Added WorkspaceClient and apiRouteBuilders to handle file uploads and display real-time processing status.
