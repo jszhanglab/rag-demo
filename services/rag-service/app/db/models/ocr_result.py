@@ -17,7 +17,7 @@ class OCRResult(Base):
         nullable=False,
         index=True,
     )
-    text = Column(Text, nullable=False)
+    ocr_text = Column("text",Text, nullable=False)
     table_data = Column(JSONB, nullable=True)
     status = Column(String(50), nullable=True)
     error_message = Column(String, nullable=True)

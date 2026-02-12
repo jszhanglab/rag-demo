@@ -19,4 +19,18 @@ async def document_list(db: Session = Depends(get_db)):
 @router.get(API_ROUTES['GET_DOCUMENT_DETAIL'])
 async def document_detail(document_id: str, db: Session = Depends(get_db)):
     doc = get_document_detail(db, document_id)
-    return doc
+    if not doc:
+        return {"error": "Document not found"}
+    
+    import os
+    pure_filename = os.path.basename(doc.file_path)
+    file_url = f"http://localhost:8000/files/{pure_filename}"
+
+    return {
+        "id": str(doc.id),
+        "status": doc.status,
+        "filename": doc.filename,
+        "file_url": file_url,
+        "error_message": doc.error_message,
+        "ocr_text": doc.ocr_result.ocr_text if doc.ocr_result else None
+    }

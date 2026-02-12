@@ -1,5 +1,9 @@
+# app/main.py
+import os
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from .utils.config import settings
 from .api.upload import router as upload_router
@@ -17,6 +21,15 @@ app = FastAPI(
     openapi_url="/openapi.json" if is_dev else None,
     #lifespan=lifespan
 )
+
+#TODO A temporary way to load PDF in local dev enviroment.
+# Can not be used on cloud storage likes S3. 
+UPLOAD_DIR = r"C:\Users\zhang\Desktop\RAG\rag_demo\services\rag-service\app\uploaded_files"
+
+if not os.path.exists(UPLOAD_DIR):
+    os.makedirs(UPLOAD_DIR)
+
+app.mount("/files", StaticFiles(directory=UPLOAD_DIR), name="files")    
 
 app.add_middleware(
     CORSMiddleware,

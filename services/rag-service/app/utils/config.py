@@ -71,6 +71,7 @@ class Settings(BaseSettings):
     VECTOR_DB_URL:str
     #LLM
     LLM_MODEL_DEV:str="sentence-transformers/all-MiniLM-L6-v2"
+    GEMINI_API_KEY:str
 
     @field_validator("CORS_ORIGINS", mode="before")
     @classmethod

@@ -24,6 +24,14 @@
     "delete_btn": "删除",
     "rename_btn": "重命名"
   },
+  "viewer": {
+    "title": "OCR 识别结果",
+    "select_prompt": "请在左侧选择一个文档",
+    "loading_text": "正在提取文档文字...",
+    "retry_btn": "重试",
+    "load_failed": "加载失败: ",
+    "error_label": "错误详情: "
+  },
   "fileProcessStatus": {
     "uploaded": "已上传，等待 OCR 开始…",
     "ocr_processing": "OCR 处理中…",
@@ -33,5 +41,14 @@
     "embedding_done": "全部处理完成 ✅",
     "failed": "处理失败 ❌",
     "default": "加载中..."
+  },
+  "chat": {
+    "placeholder": "输入消息...",
+    "send_btn": "发送",
+    "searching": "正在检索...",
+    "no_result": "未找到相关上下文。",
+    "relevant_context": "找到以下相关片段：",
+    "select_doc_first": "请先选择一个文档",
+    "score": "匹配度"
   }
 }

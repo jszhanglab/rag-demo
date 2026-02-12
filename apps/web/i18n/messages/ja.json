@@ -24,6 +24,14 @@
     "delete_btn": "削除する",
     "rename_btn": "名前を変更"
   },
+  "viewer": {
+    "title": "OCR認識結果",
+    "select_prompt": "左側のサイドバーからドキュメントを選択してください",
+    "loading_text": "ドキュメントのテキストを抽出中...",
+    "retry_btn": "再試行",
+    "load_failed": "読み込み失敗: ",
+    "error_label": "エラー詳細: "
+  },
   "fileProcessStatus": {
     "uploaded": "アップロード完了、OCR開始待ち…",
     "ocr_processing": "OCR処理中…",
@@ -33,5 +41,14 @@
     "embedding_done": "すべての処理が完了しました ✅",
     "failed": "処理に失敗しました ❌",
     "default": "ローディング..."
+  },
+  "chat": {
+    "placeholder": "メッセージを入力...",
+    "send_btn": "送信",
+    "searching": "検索中...",
+    "no_result": "関連するコンテキストが見つかりませんでした。",
+    "relevant_context": "以下の関連する抜粋が見つかりました：",
+    "select_doc_first": "まずドキュメントを選択してください",
+    "score": "スコア"
   }
 }

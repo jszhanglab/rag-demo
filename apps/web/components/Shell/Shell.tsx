@@ -36,7 +36,7 @@ export default function Shell({
 
       <main
         className={[
-          "min-h-[calc(100vh-var(--header-h))] grid divide-x divide-slate-200",
+          "h-[calc(100vh-var(--header-h))] grid divide-x divide-slate-200",
           sidebarOpen && docId
             ? "grid-cols-[18rem_1fr_26rem]" // Sidebar | Viewer | Chat
             : sidebarOpen && !docId

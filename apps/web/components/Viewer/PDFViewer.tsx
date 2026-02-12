@@ -1,15 +1,21 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import useSWR from "swr";
 import { buildDocumentDetailUrl } from "@/constants/apiRouteBuilders";
 import { useTranslations } from "next-intl";
 
+import { Viewer, Worker } from "@react-pdf-viewer/core";
+import { pageNavigationPlugin } from "@react-pdf-viewer/page-navigation";
+
+import "@react-pdf-viewer/core/lib/styles/index.css";
+import "@react-pdf-viewer/page-navigation/lib/styles/index.css";
+
 type DocumentDetail = {
   id?: string;
-  status: string; // DocumentStatus
+  status: string;
+  file_url?: string;
   ocr_text?: string | null;
-  error_message?: string | null;
 };
 
 interface PDFViewerProps {
@@ -17,117 +23,112 @@ interface PDFViewerProps {
 }
 
 const fetcher = async (url: string): Promise<DocumentDetail> => {
-  const res = await fetch(url, {
-    headers: { Accept: "application/json" },
-  });
-  if (!res.ok) {
-    throw new Error(`Failed to fetch document detail: ${res.status}`);
-  }
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`${res.status}`);
   return res.json();
 };
 
-const isTerminalStatus = (status?: string) =>
-  status === "EMBEDDING_DONE" || status === "FAILED";
-
 const PDFViewer: React.FC<PDFViewerProps> = ({ docId }) => {
-  const i18n_fileStatus = useTranslations("fileProcessStatus");
+  const t_viewer = useTranslations("viewer");
 
-  const getStatusLabel = (status?: string) => {
-    switch (status) {
-      case "UPLOADED":
-        return i18n_fileStatus("uploaded");
-      case "OCR_PROCESSING":
-        return i18n_fileStatus("ocr_processing");
-      case "OCR_DONE":
-        return i18n_fileStatus("ocr_done");
-      case "CHUNK_DONE":
-        return i18n_fileStatus("chunk_done");
-      case "EMBEDDING_PROCESSING":
-        return i18n_fileStatus("embedding_processing");
-      case "EMBEDDING_DONE":
-        return i18n_fileStatus("embedding_done");
-      case "FAILED":
-        return i18n_fileStatus("failed");
-      default:
-        return status ? `${status}` : i18n_fileStatus("default");
-    }
-  };
+  const pageNavigationPluginInstance = pageNavigationPlugin();
+  const { jumpToPage } = pageNavigationPluginInstance;
+  const jumpToPageRef = useRef(jumpToPage);
+
+  useEffect(() => {
+    jumpToPageRef.current = jumpToPage;
+  }, [jumpToPage]);
 
   const url = docId ? buildDocumentDetailUrl(docId) : null;
 
-  // Polling
-  const { data, error, isLoading, mutate } = useSWR(url, fetcher, {
-    refreshInterval: (latest) => (isTerminalStatus(latest?.status) ? 0 : 2000),
+  // 优化轮询逻辑：只要是完成或失败状态，立即停止轮询 (0)
+  const { data, error } = useSWR(url, fetcher, {
+    refreshInterval: (latest) =>
+      latest?.status === "EMBEDDING_DONE" || latest?.status === "FAILED"
+        ? 0
+        : 2000,
     revalidateOnFocus: false,
-    keepPreviousData: true,
   });
 
-  if (!docId) {
-    return <div className="text-slate-500">请选择文件</div>;
-  }
+  // 跳转监听逻辑
+  useEffect(() => {
+    const handleJump = (event: any) => {
+      const { page } = event.detail;
+      if (page && jumpToPageRef.current) {
+        console.log(`[PDFViewer] 正在跳转至第 ${page} 页`);
+        setTimeout(() => jumpToPageRef.current?.(page - 1), 300);
+      }
+    };
+    window.addEventListener("jumpToPdfLocation", handleJump);
+    return () => window.removeEventListener("jumpToPdfLocation", handleJump);
+  }, []);
 
-  if (error) {
+  if (!docId)
     return (
-      <div className="p-4 space-y-3">
-        <div className="text-red-600 text-sm">
-          获取文档详情失败：
-          {error instanceof Error ? error.message : String(error)}
-        </div>
-        <button
-          type="button"
-          className="px-3 py-1 rounded-md border text-sm hover:bg-slate-50"
-          onClick={() => mutate()}
-        >
-          重试
-        </button>
+      <div className="h-full flex items-center justify-center bg-slate-50 text-slate-400 italic">
+        请选择文档
       </div>
     );
-  }
+  if (error)
+    return (
+      <div className="p-6 text-red-500 font-medium">
+        加载失败: {error.message}
+      </div>
+    );
 
-  const status = data?.status;
-  const statusLabel = getStatusLabel(status);
-  const ocrText = data?.ocr_text ?? null;
+  const fileUrl = data?.file_url;
+  const status = data?.status || "LOADING";
 
   return (
-    <div className="h-full flex flex-col gap-4">
-      {/* 顶部状态条 */}
-      <div className="border rounded-xl bg-white px-4 py-3 text-sm text-slate-700">
-        <div className="flex flex-wrap items-center justify-between gap-2">
+    <div className="h-full flex flex-col bg-slate-100 p-4 overflow-hidden">
+      <div className="flex-1 flex flex-col bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden relative">
+        {/* 顶部状态栏 */}
+        <div className="px-6 py-3 border-b flex items-center justify-between bg-white z-10">
           <div className="flex items-center gap-2">
-            <span className="font-medium">Doc</span>
-            <span className="text-slate-600">{docId}</span>
-            <span className="text-slate-300">|</span>
-            <span className="font-medium">Page</span>
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">
+              Document Viewer
+            </span>
+            <span
+              className={`text-[10px] px-2 py-0.5 rounded-full border font-bold ${fileUrl ? "bg-emerald-50 text-emerald-600 border-emerald-100" : "bg-amber-50 text-amber-600 border-amber-100 animate-pulse"}`}
+            >
+              {status}
+            </span>
           </div>
-          <div className="text-slate-800">{statusLabel}</div>
         </div>
 
-        {/* 失败原因 */}
-        {status === "FAILED" && data?.error_message ? (
-          <div className="mt-2 text-red-600">{data.error_message}</div>
-        ) : null}
-      </div>
-
-      {/* 内容区 */}
-      <div className="flex-1 border rounded-xl bg-white p-4 overflow-auto">
-        <h2 className="text-base font-medium text-slate-800 mb-3">OCR Text</h2>
-
-        {/* 处理中/空内容 */}
-        {!ocrText ? (
-          <div className="text-slate-500 text-sm">
-            {isLoading
-              ? "正在加载…"
-              : status === "UPLOADED" || status === "OCR_PROCESSING"
-                ? "OCR 结果尚未生成，请稍候（页面会自动刷新）…"
-                : status === "FAILED"
-                  ? "没有可显示的 OCR 文本。"
-                  : "暂无 OCR 文本。"}
-          </div>
-        ) : (
-          <pre className="whitespace-pre-wrap text-sm text-slate-800 leading-6">
-            {ocrText}
-          </pre>
-        )}
+        {/* PDF 内容区 */}
+        <div className="flex-1 relative bg-slate-200">
+          {fileUrl ? (
+            <div className="absolute inset-0">
+              <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
+                <Viewer
+                  fileUrl={fileUrl}
+                  plugins={[pageNavigationPluginInstance]}
+                  theme="light"
+                />
+              </Worker>
+            </div>
+          ) : (
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-50">
+              {status === "EMBEDDING_DONE" ? (
+                /* 如果状态已完成但没 URL，说明后端接口没返回 file_url 字段 */
+                <div className="text-center p-8">
+                  <p className="text-sm text-slate-600 font-bold mb-2">
+                    处理已完成
+                  </p>
+                  <p className="text-xs text-slate-400">
+                    但未能在 API 响应中找到 PDF 文件路径。
+                  </p>
+                </div>
+              ) : (
+                <>
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-2" />
+                  <p className="text-sm text-slate-500">正在提取文档文本...</p>
+                </>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

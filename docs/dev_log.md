@@ -103,3 +103,11 @@
 - Refactored the component structure and optimized the relationships between components.
 - Implemented a document status display in the layout, showing the processing status of uploaded files with polling updates.
 - Added WorkspaceClient and apiRouteBuilders to handle file uploads and display real-time processing status.
+
+## 2026-02-01~2026-02-12
+
+- Implemented document display zone using pdf.js to show raw PDF files instead of OCR text, ensuring layout and structural consistency.
+- Integrated Gemini 1.5 Flash for semantic search, returning chunk tags that link AI answers to original PDF sources.
+- Implemented click-to-navigate functionality using a Pub-Sub pattern for cross-component communication between the chat and viewer zones.
+
+## Successfully completed the full RAG closed-loop: from file upload and OCR processing to verifiable source navigation.

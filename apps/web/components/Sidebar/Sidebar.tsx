@@ -1,9 +1,9 @@
-// apps/web/components/Sidebar/Sidebar.tsx
 "use client";
 
 import { API_ROUTES } from "@/constants/apiRoutes";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
+import { useRouter, useSearchParams, usePathname } from "next/navigation"; // 引入路由 Hook
 import useSWR from "swr";
 
 const fetcher = (url: string) =>
@@ -12,30 +12,44 @@ const fetcher = (url: string) =>
     .then((res) => res.document_list);
 
 export default function Sidebar() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  // 从当前 URL 中读取选中的 doc ID
+  const selectedFileId = searchParams.get("doc");
+
   const { data, isLoading, error } = useSWR(API_ROUTES.GET_FILE_LIST, fetcher, {
-    revalidateOnFocus: false, //Prevent auto refetch on re-focus in layout(e.g. refocus on browser)
+    revalidateOnFocus: false,
   });
 
-  const [selectedFile, setSelectedFile] = useState<string | null>(null);
-  const [hoveredFile, setHoveredFile] = useState<string | null>(null); // Track hovered file
+  const [hoveredFile, setHoveredFile] = useState<string | null>(null);
   const [showOptions, setShowOptions] = useState<string | null>(null);
   const [showDialog, setShowDialog] = useState<string | null>(null);
   const [fileHandleMode, setFileHandleMode] = useState<"rename" | "delete">(
-    "rename"
+    "rename",
   );
+
   const i18n = useTranslations("sidebar");
 
   if (isLoading) return <div className="p-4">{i18n("loading")}</div>;
-
   if (error) return <div className="p-4 text-red-600">{i18n("fail")}</div>;
 
   const handleFileClick = (fileId: string) => {
-    setSelectedFile(fileId === selectedFile ? null : fileId); // Toggle selection
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (selectedFileId === fileId) {
+      params.delete("doc");
+    } else {
+      params.set("doc", fileId);
+    }
+
+    router.push(`${pathname}?${params.toString()}`);
   };
 
   const toggleOptions = (e: React.MouseEvent, fileId: string) => {
     e.stopPropagation();
-    setShowOptions(showOptions === fileId ? null : fileId); // Toggle options visibility
+    setShowOptions(showOptions === fileId ? null : fileId);
   };
 
   return (
@@ -46,58 +60,54 @@ export default function Sidebar() {
             key={doc.id}
             className={`
               group relative flex items-center justify-between rounded-lg px-2 py-2 
-              hover:bg-slate-100 cursor-pointer transition-all
-              ${selectedFile === doc.id ? "bg-blue-100" : ""}
-              h-8
+              hover:bg-slate-200/60 cursor-pointer transition-all
+              ${selectedFileId === doc.id ? "bg-white shadow-sm ring-1 ring-slate-200 text-blue-600 font-medium" : "text-slate-600"}
+              h-9
             `}
             onClick={() => handleFileClick(doc.id)}
-            onMouseEnter={() => setHoveredFile(doc.id)} // Mouse enter to show options
-            onMouseLeave={() => setHoveredFile(null)} // Mouse leave to hide options
+            onMouseEnter={() => setHoveredFile(doc.id)}
+            onMouseLeave={() => setHoveredFile(null)}
           >
-            <span
-              className={`truncate flex-1 ${
-                selectedFile === doc.id ? "pr-6" : "group-hover:pr-6"
-              }`}
-            >
-              {doc.filename}
-            </span>
+            <span className="truncate flex-1">{doc.filename}</span>
 
-            {hoveredFile === doc.id && (
+            {/* 更多选项按钮（三个点） */}
+            {(hoveredFile === doc.id || showOptions === doc.id) && (
               <div
-                className="flex items-center justify-center w-6 h-6 rounded-md hover:bg-black/10 transition-colors"
+                className="flex items-center justify-center w-6 h-6 rounded-md hover:bg-slate-300 transition-colors"
                 onClick={(e) => toggleOptions(e, doc.id)}
               >
-                <span className="text-xl leading-none">&#8942;</span>
+                <span className="text-lg mb-2 font-bold text-slate-500">
+                  ...
+                </span>
               </div>
             )}
 
+            {/* 操作菜单 */}
             {showOptions === doc.id && (
               <>
                 <div
                   className="fixed inset-0 z-40"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setShowOptions(null);
-                  }}
+                  onClick={() => setShowOptions(null)}
                 />
-
-                <div className="absolute top-10 right-0 p-1 bg-white/80 backdrop-blur-md border border-slate-200 shadow-xl rounded-xl w-32 z-50 animate-in fade-in zoom-in duration-150">
+                <div className="absolute top-full right-0 mt-1 p-1 bg-white border border-slate-200 shadow-xl rounded-lg w-32 z-50">
                   <button
-                    className="block w-full px-3 py-1.5 text-left text-slate-700 hover:bg-blue-500 hover:text-white rounded-lg transition-colors"
-                    onClick={() => {
-                      setShowDialog("rename");
-                      setShowOptions(null);
+                    className="block w-full px-3 py-1.5 text-left text-slate-700 hover:bg-slate-100 rounded-md transition-colors"
+                    onClick={(e) => {
+                      e.stopPropagation();
                       setFileHandleMode("rename");
+                      setShowDialog(doc.id);
+                      setShowOptions(null);
                     }}
                   >
                     {i18n("rename_btn")}
                   </button>
                   <button
-                    className="block w-full px-3 py-1.5 text-left text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                    onClick={() => {
-                      setShowDialog("delete");
-                      setShowOptions(null);
+                    className="block w-full px-3 py-1.5 text-left text-red-500 hover:bg-red-50 rounded-md transition-colors"
+                    onClick={(e) => {
+                      e.stopPropagation();
                       setFileHandleMode("delete");
+                      setShowDialog(doc.id);
+                      setShowOptions(null);
                     }}
                   >
                     {i18n("delete_btn")}
@@ -105,7 +115,9 @@ export default function Sidebar() {
                 </div>
               </>
             )}
-            {showDialog && (
+
+            {/* 对话框 */}
+            {showDialog === doc.id && (
               <FileOptionDialog
                 mode={fileHandleMode}
                 fileId={doc.id}
@@ -119,59 +131,36 @@ export default function Sidebar() {
   );
 }
 
-//TODO Dialog
-
-interface FileOptionDialogProps {
-  mode: "rename" | "delete";
+// 简单的对话框实现
+function FileOptionDialog({
+  mode,
+  fileId,
+  onClose,
+}: {
+  mode: string;
   fileId: string;
   onClose: () => void;
-}
-
-function FileOptionDialog({ mode, fileId, onClose }: FileOptionDialogProps) {
+}) {
+  const i18n = useTranslations("sidebar");
   return (
     <>
-      {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/[0.15] z-40"
-        onClick={() => {
-          onClose();
-        }}
-      ></div>
-
-      {/* Modal */}
-      <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
-        <div className="bg-white shadow-xl rounded-xl w-120 p-12">
-          <h3 className="text-xl font-semibold mb-4">File Options</h3>
-
-          <div className="space-y-4">
-            <button
-              className="w-full p-2 text-left text-gray-700 hover:bg-blue-100 rounded-md"
-              onClick={() => {
-                // Handle rename logic
-                console.log("Rename clicked");
-                onClose();
-              }}
-            >
-              Rename
-            </button>
-            <button
-              className="w-full p-2 text-left text-red-500 hover:bg-red-100 rounded-md"
-              onClick={() => {
-                // Handle delete logic
-                console.log("Delete clicked");
-                onClose();
-              }}
-            >
-              Delete
-            </button>
-          </div>
-
-          {/* Close button */}
+        className="fixed inset-0 bg-slate-900/20 backdrop-blur-[2px] z-[100]"
+        onClick={onClose}
+      />
+      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white shadow-2xl rounded-2xl w-80 p-6 z-[101]">
+        <h3 className="text-lg font-bold mb-4">
+          {mode === "rename" ? i18n("rename_btn") : i18n("delete_btn")}
+        </h3>
+        <div className="flex justify-end gap-2">
           <button
-            className="absolute top-2 right-2 text-xl text-gray-600"
             onClick={onClose}
+            className="px-3 py-1.5 text-sm font-medium text-slate-600 hover:bg-slate-100 rounded-md"
           >
-            &times;
+            {i18n("dialog_cancel_btn")}
+          </button>
+          <button className="px-3 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-md">
+            {i18n("dialog_ok_btn")}
           </button>
         </div>
       </div>

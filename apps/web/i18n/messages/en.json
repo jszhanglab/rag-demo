@@ -28,6 +28,14 @@
     "dialog_ok_btn": "OK",
     "dialog_cancel_btn": "Cancel"
   },
+  "viewer": {
+    "title": "OCR RESULT",
+    "select_prompt": "Please select a document from the left",
+    "loading_text": "Extracting document text...",
+    "retry_btn": "Retry",
+    "load_failed": "Failed to load: ",
+    "error_label": "Error: "
+  },
   "fileProcessStatus": {
     "uploaded": "Uploaded, waiting for OCR...",
     "ocr_processing": "OCR processing...",
@@ -37,5 +45,14 @@
     "embedding_done": "Processing finished ✅",
     "failed": "Processing failed ❌",
     "default": "Loading..."
+  },
+  "chat": {
+    "placeholder": "Type a message...",
+    "send_btn": "Send",
+    "searching": "Searching...",
+    "no_result": "No relevant context found.",
+    "relevant_context": "Found the following relevant excerpts:",
+    "select_doc_first": "Please select a document first",
+    "score": "Score"
   }
 }

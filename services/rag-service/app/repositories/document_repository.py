@@ -1,7 +1,7 @@
 # app/repositories/document_repository.py
 
 from sqlalchemy import func, update
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session,joinedload
 from app.db.models.user import User
 from app.db.models.document import Document
 from uuid import UUID
@@ -36,7 +36,10 @@ class DocumentRepository:
         return db_document
 
     def get_by_id(self, document_id: UUID) -> Optional[Document]:
-        return self.db.query(Document).filter(Document.id == document_id).first()
+        return self.db.query(Document)\
+            .options(joinedload(Document.ocr_result))\
+            .filter(Document.id == document_id)\
+            .first()
 
     def get_by_user_id(self, user_id: UUID) -> List[Document]:
         return self.db.query(Document).filter(Document.user_id == user_id).all()

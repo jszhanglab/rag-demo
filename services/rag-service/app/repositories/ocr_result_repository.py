@@ -26,14 +26,14 @@ class OCRResultRepository:
         self,
         document_id: UUID,
         status: str,
-        text: str = "",
+        ocr_text: str = "",
         table_data: Optional[Dict[str, Any]] = None,
         error_message: Optional[str] = None,
     ) -> OCRResult:
         obj = OCRResult(
             document_id=document_id,
             status=status,
-            text=text,
+            ocr_text=ocr_text,
             table_data=table_data,
             error_message=error_message,
         )
@@ -54,7 +54,7 @@ class OCRResultRepository:
         document_id: UUID,
         *,
         status: Optional[str] = None,
-        text: Optional[str] = None,
+        ocr_text: Optional[str] = None,
         table_data: Optional[Dict[str, Any]] = None,
         error_message: Optional[str] = None,
     ) -> Optional[OCRResult]:
@@ -64,8 +64,8 @@ class OCRResultRepository:
 
         if status is not None:
             obj.status = status
-        if text is not None:
-            obj.text = text
+        if ocr_text is not None:
+            obj.ocr_text = ocr_text
         if table_data is not None:
             obj.table_data = table_data
         if error_message is not None:
@@ -88,7 +88,7 @@ class OCRResultRepository:
         document_id: UUID,
         *,
         status: str,
-        text: str = "",
+        ocr_text: str = "",
         table_data: Optional[Dict[str, Any]] = None,
         error_message: Optional[str] = None,
     ) -> OCRResult:
@@ -100,7 +100,7 @@ class OCRResultRepository:
             updated = self.update_by_document_id(
                 document_id,
                 status=status,
-                text=text,
+                ocr_text=ocr_text,
                 table_data=table_data,
                 error_message=error_message,
             )
@@ -111,7 +111,7 @@ class OCRResultRepository:
         return self.create(
             document_id=document_id,
             status=status,
-            text=text,
+            ocr_text=ocr_text,
             table_data=table_data,
             error_message=error_message,
         )
@@ -123,7 +123,7 @@ class OCRResultRepository:
         return self.upsert_by_document_id(
             document_id,
             status=OCRStatus.PROCESSING,
-            text="",
+            ocr_text="",
             table_data=None,
             error_message=None,
         )
@@ -132,13 +132,13 @@ class OCRResultRepository:
         self,
         document_id: UUID,
         *,
-        text: str,
+        ocr_text: str,
         table_data: Optional[Dict[str, Any]] = None,
     ) -> OCRResult:
         return self.upsert_by_document_id(
             document_id,
             status=OCRStatus.SUCCESS,
-            text=text,
+            ocr_text=ocr_text,
             table_data=table_data,
             error_message=None,
         )
@@ -152,7 +152,7 @@ class OCRResultRepository:
         return self.upsert_by_document_id(
             document_id,
             status=OCRStatus.FAILED,
-            text="",
+            ocr_text="",
             table_data=None,
             error_message=error_message,
         )
