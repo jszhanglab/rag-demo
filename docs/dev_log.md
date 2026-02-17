@@ -111,3 +111,8 @@
 - Implemented click-to-navigate functionality using a Pub-Sub pattern for cross-component communication between the chat and viewer zones.
 
 ## Successfully completed the full RAG closed-loop: from file upload and OCR processing to verifiable source navigation.
+
+
+## 2026-02-17
+- Completed Readme file.
+- Remove some files not be used.

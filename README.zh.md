@@ -1,1 +1,0 @@
-- [中文](./docs/mindmap.zh.mm.md)
